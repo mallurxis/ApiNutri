@@ -115,18 +115,18 @@ class DbOperation
 	}
 
 
-		function createProdutos ($nomeProd, $quant, $mult, $valorProd, $validade, $dataEntrada){
-		$stmt = $this->con->prepare("INSERT INTO tbProdutos (nomeProd, quant, valorProd, validade, dataEntrada) VALUES (?, ?, ?, ?, ?)");
-		$stmt->bind_param("issssi", $nomeProd, $quant, $mult, $valorProd, $validade, $dataEntrada);
+		function createProdutos ($nomeProd, $quant, $quantEstoque, $mult, $valorProd, $validade, $dataEntrada, $descricao){
+		$stmt = $this->con->prepare("INSERT INTO tbProdutos (nomeProd, quant, quantEstoque, valorProd, validade, dataEntrada, descricao) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		$stmt->bind_param("issssi", $nomeProd, $quant, $quantEstoque, $mult, $valorProd, $validade, $dataEntrada, $descricao);
 		if($stmt->execute())
 			return true; 			
 		return false;
 	}
 	
 	function getProdutos(){
-		$stmt = $this->con->prepare("SELECT codProd, nomeProd, quant, mult, valorProd, validade, dataEntrada FROM tbProdutos");
+		$stmt = $this->con->prepare("SELECT codProd, nomeProd, quant, quantEstoque, mult, valorProd, validade, dataEntrada, descricao FROM tbProdutos");
 		$stmt->execute();
-		$stmt->bind_result($codProd, $nomeProd, $quant, $mult, $valorProd, $validade, $dataEntrada);
+		$stmt->bind_result($codProd, $nomeProd, $quant, $quantEstoque, $mult, $valorProd, $validade, $dataEntrada, $descricao);
 		
 		$tbProdutos = array(); 
 		
@@ -135,10 +135,12 @@ class DbOperation
 			$Produtos['cod'] = $codProd; 
 			$Produtos['nome'] = $nomeProd; 
 			$Produtos['quant'] = $quant; 
+			$Produtos['quantEstoque'] = $quantEstoque; 
 			$Produtos['mult'] = $mult; 
 			$Produtos['valor'] = $valorProd; 
 			$Produtos['validade'] = $validade; 
 			$Produtos['dataEntrada'] = $dataEntrada;
+			$Produtos['descricao'] = $descricao; 
 
 			array_push($tbProdutos, $Produtos); 
 		}
@@ -147,9 +149,9 @@ class DbOperation
 	}
 	
 	
-	function updateProdutos ($codProd, $nomeProd, $quant, $mult, $valorProd, $validade, $dataEntrada){
-		$stmt = $this->con->prepare("UPDATE tbProdutos SET nome = ?, quant = ?, mult = ?, valor = ?, validade = ?, dataEntrada = ? WHERE cod = ?");
-		$stmt->bind_param("ssisi", $nomeProf, $quant, $mult, $valorProd, $validade, $dataEntrada, $codProd);
+	function updateProdutos ($codProd, $nomeProd, $quant, $quantEstoque, $mult, $valorProd, $validade, $dataEntrada, $descricao){
+		$stmt = $this->con->prepare("UPDATE tbProdutos SET nome = ?, quant = ?, quantEstoque = ?, mult = ?, valor = ?, validade = ?, dataEntrada = ?, descricao = ? WHERE cod = ?");
+		$stmt->bind_param("ssisi", $nomeProf, $quant, $quantEstoque, $mult, $valorProd, $validade, $dataEntrada, $codProd, $descricao);
 		if($stmt->execute())
 			return true; 
 		return false; 
